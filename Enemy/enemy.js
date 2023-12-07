@@ -6,12 +6,13 @@ const enemyConfig = {
     speedMax: 2,
     speedMin: 1,
     maxSprintSpeed: 3,
-    minSprintSpeed: 2
+    minSprintSpeed: 1.5
 }
 
 // define Enemy constructor
 class Enemy {
-    constructor(radius, color, speed, health) {
+    constructor(radius, color, speed, health, boost) {
+
         let x;
         let y;
         if (Math.random() < 0.5) {
@@ -25,9 +26,10 @@ class Enemy {
         (this.x = x),
             (this.y = y),
             (this.radius = radius),
-            (this.color = color),
             (this.speed = speed),
-            (this.health = health)
+            (this.color = color),
+            (this.health = health),
+            (this.boost = boost);
     }
 
     render() {
@@ -38,21 +40,18 @@ class Enemy {
         c.closePath();
         c.fill();
     }
-    
+
     takeDamage() {
         this.health -= 1;
         // Add blinking white upons hit
         const blink = new VFX(this.x, this.y, this.radius, this.velocity, this.speed);
         VFXs.push(blink);
     }
-    
+
     sprint() {
         this.color = 'red';
-        if (this.radius >= 20) {
-            this.speed = enemyConfig.minSprintSpeed;
-        } else {
-            this.speed = enemyConfig.maxSprintSpeed;
-        }
+        this.speed = this.boost;
+
     }
     update() {
         const angle = Math.atan2(
@@ -70,15 +69,13 @@ class Enemy {
     }
 }
 
-// define spawn Enemy function
+// define spawn BigEnemy function
 function spawnEnemy() {
-
     setInterval(() => {
-        const radius = Math.floor(Math.random() * (enemyConfig.radiusMax - enemyConfig.radiusMin) + enemyConfig.radiusMin);
+        let enemySpawnChange = Math.floor(Math.random() * 2);
         const color = enemyConfig.color[Math.floor(Math.random() * enemyConfig.color.length)];
-        const speed = radius >= 20 ? 1 : Math.floor(Math.random() * (enemyConfig.speedMax - enemyConfig.speedMin) + enemyConfig.speedMin);
-        const health = radius >= 20 ? 5 : Math.floor(Math.random() * (3 - 1) + 1);
-        const enemy = new Enemy(radius, color, speed, health);
+        const speed = Math.floor(Math.random() * (enemyConfig.speedMax - enemyConfig.speedMin) + enemyConfig.speedMin);
+        const enemy = enemySpawnChange === 0 ? new Enemy(10, color, speed, 2, enemyConfig.maxSprintSpeed) : new Enemy(30, color, speed, 5, enemyConfig.minSprintSpeed);
         enemies.push(enemy);
     }, 1000);
 }

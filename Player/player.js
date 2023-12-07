@@ -23,6 +23,19 @@ class Player {
         c.fill();
     }
     update() {
+        /* 
+        prevent player from going off screen
+        X axis
+        */
+        if (this.x - this.radius + this.velx <= 0) { this.velx = 0 }
+        if (this.x + this.radius + this.velx > canvas.width) { this.velx = 0 }
+        /* 
+        prevent player from going off screen
+        Y axis
+        */
+        if (this.y - this.radius + this.vely <= 0) { this.vely = 0 }
+        if (this.y + this.radius + this.vely > canvas.height) { this.vely = 0 }
+
         this.x += this.velx;
         this.y += this.vely;
         this.render();

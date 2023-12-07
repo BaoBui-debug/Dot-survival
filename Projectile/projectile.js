@@ -28,7 +28,6 @@ class Projectile {
         this.y = this.y + this.vely * this.speed;
         this.render();
     }
-
 }
 
 //mouse down check
@@ -54,12 +53,11 @@ function collisionCheck(enemy, enemyIndex) {
         // once collided
         if (distant - projectile.radius - enemy.radius < 1) {
             // subtract enemy health by one
+            enemy.takeDamage();
             if (enemy.health < 2) {
                 setTimeout(() => {
                     enemies.splice(enemyIndex, 1)    
                 }, 0)
-            } else {
-                enemy.takeDamage();
             }
             // push particle
             for (let i = 0; i < 8; i++) {

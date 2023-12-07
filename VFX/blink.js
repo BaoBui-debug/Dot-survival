@@ -1,13 +1,12 @@
 // define Particle constructor
 class VFX {
-    constructor(x, y, radius, velocity, speed) {
+    constructor(x, y, radius, speed) {
         (this.x = x),
-        (this.y = y),
-        (this.radius = radius),
-        (this.color = "white"),
-        (this.alpha = 2),
-        (this.velocity = velocity),
-        (this.speed = speed)
+            (this.y = y),
+            (this.radius = radius),
+            (this.color = "white"),
+            (this.alpha = 2),
+            (this.speed = speed)
     }
     render() {
         c.save();
@@ -20,9 +19,18 @@ class VFX {
         c.restore();
     }
     update() {
-        this.render(); 
-        this.x += this.velocity.x * this.speed;
-        this.y += this.velocity.y * this.speed;
-        this.alpha -= 0.2;
+        const angle = Math.atan2(
+            player.y - this.y,
+            player.x - this.x
+        );
+        this.velocity = {
+            x: Math.cos(angle),
+            y: Math.sin(angle),
+        };
+
+        this.render();
+        this.x += this.velocity.x * (this.speed + 2) ;
+        this.y += this.velocity.y * (this.speed + 2);
+        this.alpha -= 0.01;
     }
 }

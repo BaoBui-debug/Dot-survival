@@ -16,16 +16,17 @@ function start(callback) {
         c.clearRect(0, 0, canvas.width, canvas.height);
         //render player
         player.update();
+
         //render particles
         particles.forEach((particle, particleIndex) => {
+            particle.update();
+
             if (particle.alpha <= 0) {
                 setTimeout(() => {
                     particles.splice(particleIndex, 1)
                 }, 0)
             }
-            else {
-                particle.update();
-            }
+
         })
         // render projectiles
         projectiles.forEach((projectile, projectileIndex) => {
@@ -42,27 +43,25 @@ function start(callback) {
         })
         // render enemies
         enemies.forEach((enemy, enemyIndex) => {
-            collisionCheck(enemy, enemyIndex);
             enemy.update();
             // if enemy and player reach a certain distant, enemy become faster
             const distant = Math.hypot(enemy.x - player.x, enemy.y - player.y)
             if (distant - enemy.radius - player.radius < 300) {
                 enemy.sprint();
             }
+            collisionCheck(enemy, enemyIndex);
         })
         // render VFX 
         VFXs.forEach((vfx, vfxIndex) => {
-            console.log(vfx.velocity)
-            if (vfx.alpha < 0) {
+            vfx.update();
+            if (vfx.alpha === 0) {
                 setTimeout(() => {
                     VFXs.splice(vfxIndex, 1)
                 }, 0)
-            } else {
-                vfx.update();
             }
         })
     }
     animate()
     callback()
 }
-start(spawnEnemy);
+//start(spawnEnemy);
