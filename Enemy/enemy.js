@@ -51,7 +51,6 @@ class Enemy {
     sprint() {
         this.color = 'red';
         this.speed = this.boost;
-
     }
     update() {
         const angle = Math.atan2(

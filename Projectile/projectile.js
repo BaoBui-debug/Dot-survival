@@ -1,5 +1,5 @@
 // projectiles configs
-const projectileConfig = {
+var projectileConfig = {
     radius: 7,
     color: 'white',
     speed: 6
@@ -41,7 +41,7 @@ document.addEventListener('mousedown', (event) => {
         x: Math.cos(angle),
         y: Math.sin(angle),
     };
-        var projectile = new Projectile(player.x, player.y, velocity, projectileConfig.radius, projectileConfig.color, projectileConfig.speed);
+        const projectile = new Projectile(player.x, player.y, velocity, projectileConfig.radius, projectileConfig.color, projectileConfig.speed);
         projectiles.push(projectile)
 });
 
