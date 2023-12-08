@@ -64,4 +64,4 @@ function start(callback) {
     animate()
     callback()
 }
-//start(spawnEnemy);
+start(spawnEnemy);
