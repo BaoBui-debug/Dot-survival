@@ -7,5 +7,5 @@ body {
     /*  Disable scrollbars */
     display: block;
     /* No floating content on sides */
-    background-color: dimgray;
+    /* background-color: dimgray; */
 }

@@ -13,24 +13,23 @@ function start(callback) {
 
     function animate() {
         requestAnimationFrame(animate);
-        c.clearRect(0, 0, canvas.width, canvas.height);
+        c.fillStyle = 'rgba(0 , 0, 0, 0.1)';
+        c.fillRect(0, 0, canvas.width, canvas.height);
         //render player
         player.update();
 
         //render particles
         particles.forEach((particle, particleIndex) => {
-            particle.update();
-
             if (particle.alpha <= 0) {
                 setTimeout(() => {
                     particles.splice(particleIndex, 1)
                 }, 0)
+            } else {
+                particle.update();
             }
-
         })
         // render projectiles
         projectiles.forEach((projectile, projectileIndex) => {
-            projectile.update();
             // if projectiles off screen, remove
             if (projectile.x + projectile.radius < 0
                 || projectile.x - projectile.radius > canvas.width
@@ -39,29 +38,33 @@ function start(callback) {
                 setTimeout(() => {
                     projectiles.splice(projectileIndex, 1)
                 }, 0)
+            } else {
+                projectile.update();
             }
         })
         // render enemies
         enemies.forEach((enemy, enemyIndex) => {
             enemy.update();
+            collisionCheck(enemy, enemyIndex);
+            
             // if enemy and player reach a certain distant, enemy become faster
             const distant = Math.hypot(enemy.x - player.x, enemy.y - player.y)
             if (distant - enemy.radius - player.radius < 300) {
                 enemy.sprint();
-            }
-            collisionCheck(enemy, enemyIndex);
+            } 
         })
         // render VFX 
         VFXs.forEach((vfx, vfxIndex) => {
-            vfx.update();
-            if (vfx.alpha === 0) {
+            if (vfx.alpha < 0) {
                 setTimeout(() => {
                     VFXs.splice(vfxIndex, 1)
                 }, 0)
+            } else {
+                vfx.update();
             }
         })
     }
     animate()
     callback()
 }
-start(spawnEnemy);
+//start(spawnEnemy);

@@ -5,7 +5,7 @@ class VFX {
             (this.y = y),
             (this.radius = radius),
             (this.color = "white"),
-            (this.alpha = 2),
+            (this.alpha = 5),
             (this.speed = speed)
     }
     render() {
