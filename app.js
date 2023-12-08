@@ -6,6 +6,9 @@ var projectiles = [];
 var enemies = [];
 var particles = [];
 var VFXs = [];
+var scoreUI = document.getElementById('scoreEl');
+let scoreVal = 0;
+let state = 'vulnerable';
 
 // start game
 
@@ -15,15 +18,18 @@ function start(callback) {
         requestAnimationFrame(animate);
         c.fillStyle = 'rgba(0 , 0, 0, 0.1)';
         c.fillRect(0, 0, canvas.width, canvas.height);
+
         //render player
-        player.update();
+        if (player.health < 2) {
+            console.log("game over")
+        } else {
+            player.update();
+        }
 
         //render particles
         particles.forEach((particle, particleIndex) => {
             if (particle.alpha <= 0) {
-                setTimeout(() => {
-                    particles.splice(particleIndex, 1)
-                }, 0)
+                particles.splice(particleIndex, 1)
             } else {
                 particle.update();
             }
@@ -35,9 +41,7 @@ function start(callback) {
                 || projectile.x - projectile.radius > canvas.width
                 || projectile.y + projectile.radius < 0
                 || projectile.y - projectile.radius > canvas.height) {
-                setTimeout(() => {
-                    projectiles.splice(projectileIndex, 1)
-                }, 0)
+                projectiles.splice(projectileIndex, 1)
             } else {
                 projectile.update();
             }
@@ -46,19 +50,22 @@ function start(callback) {
         enemies.forEach((enemy, enemyIndex) => {
             enemy.update();
             collisionCheck(enemy, enemyIndex);
-            
             // if enemy and player reach a certain distant, enemy become faster
             const distant = Math.hypot(enemy.x - player.x, enemy.y - player.y)
             if (distant - enemy.radius - player.radius < 300) {
                 enemy.sprint();
-            } 
+            }
+            // collide with player
+            if(distant -enemy.radius - player.radius < 1) {
+                player.takeDamage(false);
+                
+            }
+
         })
         // render VFX 
         VFXs.forEach((vfx, vfxIndex) => {
             if (vfx.alpha < 0) {
-                setTimeout(() => {
-                    VFXs.splice(vfxIndex, 1)
-                }, 0)
+                VFXs.splice(vfxIndex, 1)
             } else {
                 vfx.update();
             }
@@ -67,4 +74,5 @@ function start(callback) {
     animate()
     callback()
 }
+
 //start(spawnEnemy);

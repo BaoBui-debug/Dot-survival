@@ -2,18 +2,23 @@
 const playerConfig = {
     radius: 10,
     color: 'white',
-    speed: 2
+    speed: 2,
+    health: 3
 }
 // define Player constructor
 class Player {
-    constructor(x, y, radius, speed, color) {
+    constructor(x, y, radius, speed, color, health) {
         (this.x = x / 2),
             (this.y = y / 2),
             (this.velx = 0),
             (this.vely = 0),
             (this.speed = speed),
             (this.radius = radius),
-            (this.color = color);
+            (this.color = color),
+            (this.health = health)
+    }
+    takeDamage() {
+        this.health -= 1;
     }
     render() {
         c.beginPath();
@@ -42,7 +47,7 @@ class Player {
     }
 }
 // create player
-var player = new Player(window.innerWidth, window.innerHeight, playerConfig.radius, playerConfig.speed, playerConfig.color);
+ var player = new Player(window.innerWidth, window.innerHeight, playerConfig.radius, playerConfig.speed, playerConfig.color, playerConfig.health);
 
 //keydown check
 document.addEventListener('keydown', (event) => {

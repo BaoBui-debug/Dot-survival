@@ -52,26 +52,24 @@ function collisionCheck(enemy, enemyIndex) {
         const distant = Math.hypot(enemy.x - projectile.x, enemy.y - projectile.y)
         // once collided
         if (distant - projectile.radius - enemy.radius < 1) {
+            // delete projectile
+                projectiles.splice(projectileIndex, 1)
             // subtract enemy health by one
             enemy.takeDamage();
-
             // if enemy out of health, delete
             if (enemy.health < 2) {
-              //  setTimeout(() => {
-                    enemies.splice(enemyIndex, 1)    
-              //  }, 0)
-            } 
-            
-            // push particle
+                enemies.splice(enemyIndex, 1)    
+            // update score
+            scoreVal += enemy.value;
+            scoreUI.innerHTML = scoreVal
+            }       
+            // create particle
             for (let i = 0; i < 8; i++) {
                 setTimeout(() => {
                     particles.push(new Particle(projectile.x, projectile.y, 2, enemy.color, { x: Math.random() - 0.5, y: Math.random() - 0.5 }))
                 }, 0)
             }
-            // prevent rerendering removed objects
-            setTimeout(() => {
-                projectiles.splice(projectileIndex, 1)
-            }, 0)
+
         }
     })
 }

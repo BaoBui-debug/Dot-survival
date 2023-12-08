@@ -11,7 +11,7 @@ const enemyConfig = {
 
 // define Enemy constructor
 class Enemy {
-    constructor(radius, color, speed, health, boost) {
+    constructor(radius, color, speed, health, boost, value) {
 
         let x;
         let y;
@@ -29,7 +29,9 @@ class Enemy {
             (this.speed = speed),
             (this.color = color),
             (this.health = health),
-            (this.boost = boost);
+            (this.boost = boost),
+            (this.value = value);
+
     }
 
     render() {
@@ -71,10 +73,12 @@ class Enemy {
 // define spawn BigEnemy function
 function spawnEnemy() {
     setInterval(() => {
+        // randomize change of spawing big & small enemy
         let enemySpawnChange = Math.floor(Math.random() * 2);
+        // 
         const color = enemyConfig.color[Math.floor(Math.random() * enemyConfig.color.length)];
         const speed = Math.floor(Math.random() * (enemyConfig.speedMax - enemyConfig.speedMin) + enemyConfig.speedMin);
-        const enemy = enemySpawnChange === 0 ? new Enemy(10, color, speed, 2, enemyConfig.maxSprintSpeed) : new Enemy(30, color, speed, 5, enemyConfig.minSprintSpeed);
+        const enemy = enemySpawnChange === 0 ? new Enemy(10, color, speed, 2, enemyConfig.maxSprintSpeed, 10) : new Enemy(30, color, speed, 5, enemyConfig.minSprintSpeed, 25);
         enemies.push(enemy);
     }, 1000);
 }
