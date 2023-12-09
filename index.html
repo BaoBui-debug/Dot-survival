@@ -16,6 +16,7 @@
             /*  Disable scrollbars */
             display: block;
             /* No floating content on sides */
+            background-color: black;
         }
     </style>
     <!-- Tailwind Css -->
@@ -29,6 +30,17 @@
         <span class="text-lg" id="scoreEl">0</span>
     </div>
     <!--  -->
+    <!-- Game over UI -->
+    <div class="fixed select-none inset-0 flex items-center justify-center" id="gameModal">
+        <div class="bg-white max-w-md w-full p-6 text-center">
+            <h1 class="text-4xl font-bold leading-none" id="scoreModal">0</h1>
+            <p class="text-sm text-gray-700 mb-4">Points</p>
+            <div>
+                <button class="bg-blue-500 text-white w-full py-3 rounded-full" id="startGameBtn">Start Game</button>
+            </div>
+        </div>
+    </div>
+    <!--  -->
     <canvas id="canvas"></canvas>
     <!-- script links -->
     <script src="/VFX/blink.js"></script>
@@ -36,6 +48,7 @@
     <script src="/Player/player.js"></script>
     <script src="/Projectile/projectile.js"></script>
     <script src="/Enemy/enemy.js"></script>
+    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.3/gsap.min.js"
         integrity="sha512-7Au1ULjlT8PP1Ygs6mDZh9NuQD0A5prSrAUiPHMXpU6g3UMd8qesVnhug5X4RoDr35x5upNpx0A6Sisz1LSTXA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>

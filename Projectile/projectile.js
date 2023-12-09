@@ -46,7 +46,7 @@ document.addEventListener('mousedown', (event) => {
 });
 
 // collision detection
-function collisionCheck(enemy, enemyIndex) {
+function projectileCheck(enemy, enemyIndex) {
     // collision checking 
     projectiles.forEach((projectile, projectileIndex) => {
         const distant = Math.hypot(enemy.x - projectile.x, enemy.y - projectile.y)
@@ -61,7 +61,7 @@ function collisionCheck(enemy, enemyIndex) {
                 enemies.splice(enemyIndex, 1)    
             // update score
             scoreVal += enemy.value;
-            scoreUI.innerHTML = scoreVal
+            scoreUI.innerHTML = scoreVal;
             }       
             // create particle
             for (let i = 0; i < 8; i++) {

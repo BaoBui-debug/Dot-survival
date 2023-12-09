@@ -3,7 +3,7 @@ const playerConfig = {
     radius: 10,
     color: 'white',
     speed: 2,
-    health: 3
+    health: 1
 }
 // define Player constructor
 class Player {
@@ -46,8 +46,8 @@ class Player {
         this.render();
     }
 }
-// create player
- var player = new Player(window.innerWidth, window.innerHeight, playerConfig.radius, playerConfig.speed, playerConfig.color, playerConfig.health);
+// // create player
+// var player = new Player(window.innerWidth, window.innerHeight, playerConfig.radius, playerConfig.speed, playerConfig.color, playerConfig.health);
 
 //keydown check
 document.addEventListener('keydown', (event) => {
@@ -96,3 +96,13 @@ document.addEventListener('keyup', (event) => {
         }
     }
 });
+
+// collision detection
+function playerCheck(enemy) {
+    // collision checking 
+    const distant = Math.hypot(enemy.x - player.x, enemy.y - player.y)
+    // once collided
+    if (distant - enemy.radius - player.radius < 1) {
+        player.takeDamage();
+    }
+}
