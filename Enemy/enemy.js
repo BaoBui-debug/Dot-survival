@@ -11,7 +11,7 @@ const enemyConfig = {
 
 // define Enemy constructor
 class Enemy {
-    constructor(radius, color, speed, health, boost, value) {
+    constructor(radius, color, speed, health, boost, value, player, engine) {
 
         let x;
         let y;
@@ -28,36 +28,33 @@ class Enemy {
             (this.radius = radius),
             (this.speed = speed),
             (this.color = color),
+            (this.velocity = { x: undefined, y: undefined }),
             (this.health = health),
             (this.boost = boost),
-            (this.value = value);
-
+            (this.value = value),
+            (this.engine = engine),
+            (this.player = player);
     }
 
-    render() {
-        c.save();
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, Math.PI * 2, 0, false);
-        c.fillStyle = this.color;
-        c.closePath();
-        c.fill();
+    render(hit) {
+        this.engine.beginPath();
+        this.engine.arc(this.x, this.y, this.radius, Math.PI * 2, 0, false);
+        this.engine.fillStyle = hit === false ? this.color : 'white';
+        this.engine.closePath();
+        this.engine.fill();
     }
-
     takeDamage() {
         this.health -= 1;
-        // Add blinking white upons hit
-        const blink = new VFX(this.x, this.y, this.radius, this.velocity, this.speed);
-        VFXs.push(blink);
+        this.render(true);
     }
-
     sprint() {
         this.color = 'red';
         this.speed = this.boost;
     }
     update() {
         const angle = Math.atan2(
-            player.y - this.y,
-            player.x - this.x
+            this.player.y - this.y,
+            this.player.x - this.x
         );
         this.velocity = {
             x: Math.cos(angle),
@@ -66,19 +63,25 @@ class Enemy {
 
         this.x += this.velocity.x * this.speed;
         this.y += this.velocity.y * this.speed;
-        this.render();
+        this.render(false);
     }
 }
 
 // define spawn BigEnemy function
-function spawnEnemy() {
+function spawnEnemy(enemyArray, player, engine) {
     setInterval(() => {
         // randomize change of spawing big & small enemy
         let enemySpawnChange = Math.floor(Math.random() * 2);
         // 
         const color = enemyConfig.color[Math.floor(Math.random() * enemyConfig.color.length)];
         const speed = Math.floor(Math.random() * (enemyConfig.speedMax - enemyConfig.speedMin) + enemyConfig.speedMin);
-        const enemy = enemySpawnChange === 0 ? new Enemy(10, color, speed, 2, enemyConfig.maxSprintSpeed, 10) : new Enemy(30, color, speed, 5, enemyConfig.minSprintSpeed, 25);
-        enemies.push(enemy);
+        if (enemySpawnChange === 0) {
+            enemyArray.push(new Enemy(10, color, speed, 2, enemyConfig.maxSprintSpeed, 2, player, engine))
+        }
+        else {
+            enemyArray.push(new Enemy(30, color, speed, 5, enemyConfig.minSprintSpeed, 10, player, engine))
+        }
     }, 1000);
 }
+
+export { spawnEnemy };

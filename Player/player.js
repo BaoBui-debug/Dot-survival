@@ -7,102 +7,92 @@ const playerConfig = {
 }
 // define Player constructor
 class Player {
-    constructor(x, y, radius, speed, color, health) {
+    constructor(x, y, engine) {
         (this.x = x / 2),
             (this.y = y / 2),
             (this.velx = 0),
             (this.vely = 0),
-            (this.speed = speed),
-            (this.radius = radius),
-            (this.color = color),
-            (this.health = health)
+            (this.speed = playerConfig.speed),
+            (this.radius = playerConfig.radius),
+            (this.color = playerConfig.color),
+            (this.health = playerConfig.health),
+            (this.engine = engine)
     }
-    takeDamage() {
-        this.health -= 1;
+    checkMovementInput() {
+        //keydown check
+        document.addEventListener('keydown', (event) => {
+            if (event.key == 'w') {
+                this.vely = -this.speed;
+            }
+            if (event.key == 's') {
+                this.vely = this.speed;
+            }
+            if (event.key == 'a') {
+                this.velx = -this.speed;
+            }
+            if (event.key == 'd') {
+                this.velx = this.speed;
+            }
+        });
+        // keyup check
+        document.addEventListener('keyup', (event) => {
+            if (event.key == 'w') {
+                if (this.vely != this.speed) {
+                    this.vely = 0;
+                } else {
+                    this.vely = this.speed;
+                }
+            }
+            if (event.key == 's') {
+                if (this.vely != -this.speed) {
+                    this.vely = 0;
+                } else {
+                    this.vely = -this.speed;
+                }
+            }
+            if (event.key == 'a') {
+                if (this.velx != this.speed) {
+                    this.velx = 0;
+                } else {
+                    this.velx = this.speed;
+                }
+            }
+            if (event.key == 'd') {
+                if (this.velx != -this.speed) {
+                    this.velx = 0;
+                } else {
+                    this.velx = -this.speed;
+                }
+            }
+        });
     }
-    render() {
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, Math.PI * 2, 0, false);
-        c.fillStyle = this.color;
-        c.closePath();
-        c.fill();
+    collisionCheck(enemy) {
+        const distant = Math.hypot(enemy.x - this.x, enemy.y - this.y)
+        if (distant - enemy.radius - this.radius < 1) {
+            this.health -= 1;
+        }
     }
-    update() {
-        /* 
-        prevent player from going off screen
-        X axis
-        */
+    preventOfScreen() {
+        // X axis
         if (this.x - this.radius + this.velx <= 0) { this.velx = 0 }
         if (this.x + this.radius + this.velx > canvas.width) { this.velx = 0 }
-        /* 
-        prevent player from going off screen
-        Y axis
-        */
+        // Y axis
         if (this.y - this.radius + this.vely <= 0) { this.vely = 0 }
         if (this.y + this.radius + this.vely > canvas.height) { this.vely = 0 }
-
+    }
+    render() {
+        this.engine.beginPath();
+        this.engine.arc(this.x, this.y, this.radius, Math.PI * 2, 0, false);
+        this.engine.fillStyle = this.color;
+        this.engine.closePath();
+        this.engine.fill();
+    }
+    update() {
         this.x += this.velx;
         this.y += this.vely;
+        this.preventOfScreen();
+        this.checkMovementInput();
         this.render();
     }
 }
-// // create player
-// var player = new Player(window.innerWidth, window.innerHeight, playerConfig.radius, playerConfig.speed, playerConfig.color, playerConfig.health);
-
-//keydown check
-document.addEventListener('keydown', (event) => {
-    if (event.key == 'w') {
-        player.vely = -player.speed;
-    }
-    if (event.key == 's') {
-        player.vely = player.speed;
-    }
-    if (event.key == 'a') {
-        player.velx = -player.speed;
-    }
-    if (event.key == 'd') {
-        player.velx = player.speed;
-    }
-});
-
-// keyup check
-document.addEventListener('keyup', (event) => {
-    if (event.key == 'w') {
-        if (player.vely != player.speed) {
-            player.vely = 0;
-        } else {
-            player.vely = player.speed;
-        }
-    }
-    if (event.key == 's') {
-        if (player.vely != -player.speed) {
-            player.vely = 0;
-        } else {
-            player.vely = -player.speed;
-        }
-    }
-    if (event.key == 'a') {
-        if (player.velx != player.speed) {
-            player.velx = 0;
-        } else {
-            player.velx = player.speed;
-        }
-    }
-    if (event.key == 'd') {
-        if (player.velx != -player.speed) {
-            player.velx = 0;
-        } else {
-            player.velx = -player.speed;
-        }
-    }
-});
-
-// collision detection
-function playerCheck(enemy) {
-    // collision checking 
-    const distant = Math.hypot(enemy.x - player.x, enemy.y - player.y)
-    // once collided
-    if (distant - enemy.radius - player.radius < 1) {
-        player.takeDamage();
-    }
-}
+export { Player };
